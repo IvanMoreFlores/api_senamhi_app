@@ -192,7 +192,7 @@ class App_movil extends CI_Controller {
     }
 
     public function getDeficit() {
-        $array_detalle = json_decode(file_get_contents('php://input'), true);
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
         $getDeficit = $this->movil->getDeficit();
         if ($getDeficit) {
             echo json_encode($getDeficit);
@@ -203,34 +203,67 @@ class App_movil extends CI_Controller {
     }
 
     public function getNube() {
-        $array_detalle = json_decode(file_get_contents('php://input'), true);
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
         $getNube = $this->movil->getNube();
         if ($getNube) {
             echo json_encode($getNube);
         } else {
-            $mensaje = array("error" => "No se encontró datos de nube para mostrar");
+            $mensaje = array("error" => "No se encontró Datos de nube para mostrar");
             echo json_encode($mensaje);
         }
     }
 
     public function getViento() {
-        $array_detalle = json_decode(file_get_contents('php://input'), true);
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
         $getViento = $this->movil->getViento();
         if ($getViento) {
             echo json_encode($getViento);
         } else {
-            $mensaje = array("error" => "No se encontró datos de viento para mostrar");
+            $mensaje = array("error" => "No se encontró Datos de viento para mostrar");
             echo json_encode($mensaje);
         }
     }
 
     public function getUmbrales() {
-        $array_detalle = json_decode(file_get_contents('php://input'), true);
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
         $getUmbrales = $this->movil->getUmbrales();
         if ($getUmbrales) {
             echo json_encode($getUmbrales);
         } else {
-            $mensaje = array("error" => "No se encontró validaciones para mostrar");
+            $mensaje = array("error" => "No se encontró Validaciones para mostrar");
+            echo json_encode($mensaje);
+        }
+    }
+
+    public function getOcurrencia() {
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
+        $getOcurrencia = $this->movil->getOcurrencia();
+        if ($getOcurrencia) {
+            echo json_encode($getOcurrencia);
+        } else {
+            $mensaje = array("error" => "No se encontró Ocurrencias para mostrar");
+            echo json_encode($mensaje);
+        }
+    }
+
+    public function getEvento() {
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
+        $getOcurrencia = $this->movil->getEvento();
+        if ($getOcurrencia) {
+            echo json_encode($getOcurrencia);
+        } else {
+            $mensaje = array("error" => "No se encontró Eventos para mostrar");
+            echo json_encode($mensaje);
+        }
+    }
+
+    public function getEvento_x_para() {
+//        $array_detalle = json_decode(file_get_contents('php://input'), true);
+        $getOcurrencia = $this->movil->getEvento_x_para();
+        if ($getOcurrencia) {
+            echo json_encode($getOcurrencia);
+        } else {
+            $mensaje = array("error" => "No se encontró Eventos por parametros para mostrar");
             echo json_encode($mensaje);
         }
     }
@@ -251,10 +284,58 @@ class App_movil extends CI_Controller {
             ":PARAM11" => trim((string) $array_detalle['DETALLE'], '|'), // CADENA DETALLE
             ":PARAM12" => null, // CADENA LOG
         );
-        $nomProcedure = 'SPC_INSERT_CABE_ING_MOV_WEB';
+        $nomProcedure = 'SPC_VARIABLE_ING_MOV_WEB';
         $cadenaParam = ':PARAM1, :PARAM2, :PARAM3, :PARAM4, :PARAM5, :PARAM6, :PARAM7, :PARAM8, :PARAM9, :PARAM10, :PARAM11, :PARAM12,';
         log_message('error', print_r($arrayData, true));
         $result = $this->movil->ejecutarProcedure($nomProcedure, $cadenaParam, $arrayData);
+        echo json_encode($result);
+    }
+
+    public function postMeteoro() {
+        $array_detalle = json_decode(file_get_contents('php://input'), true);
+        $arrayData = array(
+            ":PARAM1" => (string) $array_detalle['V_COD_ESTA'], // ID ESTACION
+            ":PARAM2" => (string) $array_detalle['FECHA_MOVIL'], // FECHA_REGISTRO DE WEB
+            ":PARAM3" => (string) $array_detalle['FECHA_MOVIL'], // FECHA MOVIL
+            ":PARAM4" => (string) $array_detalle['ID_USUARIO'], // ID USUARIO
+            ":PARAM5" => (string) (isset($array_detalle['NUM_LATITUD']) ? str_replace('.', ',', $array_detalle['NUM_LATITUD']) : null), // LATITUD
+            ":PARAM6" => (string) (isset($array_detalle['NUM_LONGITUD']) ? str_replace('.', ',', $array_detalle['NUM_LONGITUD']) : null), // LONGITUD
+            ":PARAM7" => (string) $array_detalle['FLG_CANAL'], // CANAL
+            ":PARAM8" => (string) $array_detalle['FLG_MEDIO'], // MEDIO
+            ":PARAM9" => null, // ID CABECERA
+            ":PARAM10" => trim((string) $array_detalle['DETALLE'], '|'), // CADENA DETALLE
+            ":PARAM11" => null, // CADENA LOG
+            ":PARAM12" => (string) $array_detalle['FLG_TRANSAC'], // FLG_TRANSAC
+        );
+        $nomProcedure = 'SPC_ING_EVENTO_MOV_WEB';
+        $cadenaParam = ':PARAM1, :PARAM2, :PARAM3, :PARAM4, :PARAM5, :PARAM6, :PARAM7, :PARAM8, :PARAM9, :PARAM10, :PARAM11, :PARAM12,';
+        log_message('error', print_r($arrayData, true));
+        $result = $this->movil->ejecutarProcedure($nomProcedure, $cadenaParam, $arrayData);
+        log_message('error', print_r($result, true));
+        echo json_encode($result);
+    }
+    
+    public function postAforo() {
+        $array_detalle = json_decode(file_get_contents('php://input'), true);
+        $arrayData = array(
+            ":PARAM1" => (string) $array_detalle['V_COD_ESTA'], // ID ESTACION
+            ":PARAM2" => (string) $array_detalle['FECHA_MOVIL'], // FECHA_REGISTRO DE WEB
+            ":PARAM3" => (string) $array_detalle['FECHA_MOVIL'], // FECHA MOVIL
+            ":PARAM4" => (string) $array_detalle['ID_USUARIO'], // ID USUARIO
+            ":PARAM5" => (string) (isset($array_detalle['NUM_LATITUD']) ? str_replace('.', ',', $array_detalle['NUM_LATITUD']) : null), // LATITUD
+            ":PARAM6" => (string) (isset($array_detalle['NUM_LONGITUD']) ? str_replace('.', ',', $array_detalle['NUM_LONGITUD']) : null), // LONGITUD
+            ":PARAM7" => (string) $array_detalle['FLG_CANAL'], // CANAL
+            ":PARAM8" => (string) $array_detalle['FLG_MEDIO'], // MEDIO
+            ":PARAM9" => null, // ID CABECERA
+            ":PARAM10" => trim((string) $array_detalle['DETALLE'], '|'), // CADENA DETALLE
+            ":PARAM11" => null, // CADENA LOG
+            ":PARAM12" => (string) $array_detalle['FLG_TRANSAC'], // FLG_TRANSAC
+        );
+        $nomProcedure = 'SPC_ING_AFORO_MOV_WEB';
+        $cadenaParam = ':PARAM1, :PARAM2, :PARAM3, :PARAM4, :PARAM5, :PARAM6, :PARAM7, :PARAM8, :PARAM9, :PARAM10, :PARAM11, :PARAM12,';
+        log_message('error', print_r($arrayData, true));
+        $result = $this->movil->ejecutarProcedure($nomProcedure, $cadenaParam, $arrayData);
+        log_message('error', print_r($result, true));
         echo json_encode($result);
     }
 

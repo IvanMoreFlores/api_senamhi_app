@@ -169,6 +169,36 @@ class App_movil_model extends CI_Model {
         }
     }
 
+    public function getOcurrencia() {
+        $sql = "SELECT	* FROM	SIMENH_OCURRENCIA";
+        $result = $this->db->query($sql, array());
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function getEvento() {
+        $sql = "SELECT	* FROM	SIMENH_PARAEVENTO";
+        $result = $this->db->query($sql, array());
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function getEvento_x_para() {
+        $sql = "SELECT	* FROM	VIEW_EVENTO_X_OCURRENCIA";
+        $result = $this->db->query($sql, array());
+        if ($result->num_rows() > 0) {
+            return $result->result_array();
+        } else {
+            return null;
+        }
+    }
+
     ///////  MOVIL  ///////
 
     public function getPasswordActualByIdUsuario($idUsuario) {
